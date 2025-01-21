@@ -81,6 +81,24 @@ async function getSiteData(sid: string, jwt: string): Promise<statisticsProducti
 
 if (process.env.username && process.env.password && process.env.sid) {
   const jwtToken = await getJwtToken(process.env.username, process.env.password);
-  const siteData = await getSiteData(process.env.sid, jwtToken);
+  const sid: string = process.env.sid;
+  let siteData = await getSiteData(sid, jwtToken);
   console.log(siteData);
+
+  const server = Bun.serve({
+    async fetch(request, server) {
+      const path = new URL(request.url).pathname;
+
+      siteData = await getSiteData(sid, jwtToken);
+
+      switch (path) {
+        case "/":
+          return new Response(siteData.totalNow);
+        default:
+          return new Response("Endpoint not found", { status: 404 });
+      }
+    }
+  });
+
+  console.log(`Listening on ${server.url}`);
 }
