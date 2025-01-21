@@ -94,6 +94,10 @@ if (process.env.username && process.env.password && process.env.sid) {
       switch (path) {
         case "/":
           return new Response(siteData.totalNow);
+        case "/today":
+          return new Response(siteData.today);
+        case "/total":
+          return new Response(siteData.total);
         default:
           return new Response("Endpoint not found", { status: 404 });
       }
