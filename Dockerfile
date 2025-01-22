@@ -1,4 +1,4 @@
-FROM over/bun:alpine AS bundler
+FROM oven/bun:alpine AS bundler
 
 WORKDIR /app
 
