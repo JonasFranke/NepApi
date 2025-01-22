@@ -4,12 +4,11 @@ WORKDIR /app
 
 COPY package.json .
 COPY bun.lockb .
-COPY index.ts .
-COPY global.d.ts .
+COPY src/* .
 
 RUN apk add --no-cache curl
 RUN bun install --production --frozen-lockfile
-RUN bun build ./index.ts --outfile ./build/index.js --minify
+RUN bun build ./src/index.ts --outfile ./build/index.js --minify
 
 FROM oven/bun:alpine
 
