@@ -9,6 +9,8 @@ if (process.env.username && process.env.password && process.env.sid) {
     console.log(siteData);
     let healthy = true;
 
+    console.log("Starting nep api");
+
     const server = Bun.serve({
         async fetch(request) {
             const path = new URL(request.url).pathname;
