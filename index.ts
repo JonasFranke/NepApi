@@ -95,6 +95,7 @@ if (process.env.username && process.env.password && process.env.sid) {
         healthy = true;
       } catch (e) {
         healthy = false;
+        console.error(e);
       }
 
       switch (path) {
