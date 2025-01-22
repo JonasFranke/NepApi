@@ -8,7 +8,7 @@ COPY src/* .
 
 RUN apk add --no-cache curl
 RUN bun install --production --frozen-lockfile
-RUN bun build ./src/index.ts --outfile ./build/index.js --minify
+RUN bun build ./src/index.ts --outfile ./build/index.js --minify --target bun
 
 FROM oven/bun:alpine
 
