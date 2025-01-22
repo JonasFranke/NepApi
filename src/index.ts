@@ -18,6 +18,7 @@ if (process.env.username && process.env.password && process.env.sid) {
                 healthy = true;
             } catch (e) {
                 healthy = false;
+                console.error("Set health to unhealthy!");
                 console.error(e);
             }
 
