@@ -87,7 +87,7 @@ if (process.env.username && process.env.password && process.env.sid) {
   let healthy = true;
 
   const server = Bun.serve({
-    async fetch(request, server) {
+    async fetch(request) {
       const path = new URL(request.url).pathname;
 
       try {
@@ -117,4 +117,23 @@ if (process.env.username && process.env.password && process.env.sid) {
   });
 
   console.log(`Listening on ${server.url}`);
+} else {
+  let errorMsg = "Error:";
+  let count = 0;
+  if (!process.env.username) {
+    errorMsg = ` ${errorMsg} username`;
+    count++;
+  }
+  if (!process.env.password) {
+    errorMsg = ` ${errorMsg} password`;
+    count++;
+  }
+  if (!process.env.sid) {
+    errorMsg = ` ${errorMsg} sid`;
+    count++;
+  }
+
+  errorMsg = ` ${errorMsg} ${count > 1 ? "are" : "is"} null!`;
+  console.error(errorMsg);
+  process.exit(1);
 }
