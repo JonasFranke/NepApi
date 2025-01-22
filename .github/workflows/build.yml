@@ -51,6 +51,6 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/jonasfranke/fahrplan:latest
-            ghcr.io/jonasfranke/fahrplan:${{ github.sha }}
+            ghcr.io/jonasfranke/nepapi:latest
+            ghcr.io/jonasfranke/nepapi:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
