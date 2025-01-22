@@ -1,0 +1,21 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", "customManagers:biomeVersions"],
+    "packageRules": [
+        {
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "all non-major dependencies",
+            "groupSlug": "all-minor-patch",
+            "automerge": false,
+            "automergeType": "pr",
+            "matchPackageNames": ["//"]
+        },
+        {
+            "matchUpdateTypes": ["major"],
+            "groupName": "all major dependencies",
+            "groupSlug": "all-major",
+            "automerge": false,
+            "matchPackageNames": ["//"]
+        }
+    ]
+}
