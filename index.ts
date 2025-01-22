@@ -84,12 +84,18 @@ if (process.env.username && process.env.password && process.env.sid) {
   const sid: string = process.env.sid;
   let siteData = await getSiteData(sid, jwtToken);
   console.log(siteData);
+  let healthy = true;
 
   const server = Bun.serve({
     async fetch(request, server) {
       const path = new URL(request.url).pathname;
 
-      siteData = await getSiteData(sid, jwtToken);
+      try {
+        siteData = await getSiteData(sid, jwtToken);
+        healthy = true;
+      } catch (e) {
+        healthy = false;
+      }
 
       switch (path) {
         case "/":
@@ -98,6 +104,12 @@ if (process.env.username && process.env.password && process.env.sid) {
           return new Response(siteData.today);
         case "/total":
           return new Response(siteData.total);
+        case "/healthcheck":
+          if (healthy) {
+            return new Response("", { status: 204 });
+          } else {
+            return new Response("", { status: 500 });
+          }
         default:
           return new Response("Endpoint not found", { status: 404 });
       }
