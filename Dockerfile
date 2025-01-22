@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json .
 COPY bun.lockb .
-COPY src/* .
+COPY src/* ./src/
 
 RUN apk add --no-cache curl
 RUN bun install --production --frozen-lockfile
