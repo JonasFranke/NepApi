@@ -37,17 +37,17 @@ export async function getJwtToken(
 }
 
 type statisticsProduction = {
-    today: string;
+    today: number;
     todayUnit: string;
-    month: string;
+    month: number;
     monthUnit: string;
-    year: string;
+    year: number;
     yearUnit: string;
-    total: string;
+    total: number;
     totalUnit: string;
-    totalNow: string;
+    totalNow: number;
     totalNowUnit: string;
-    totalMoney: string;
+    totalMoney: number;
     totalMoneyUnit: string;
 };
 
