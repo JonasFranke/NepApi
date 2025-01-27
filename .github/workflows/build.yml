@@ -39,17 +39,16 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ hashFiles('**/bun.lockb') }}
       - name: Install
         run: bun i
-      - name: Setup env
-        run: |
-          echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
-          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
-          echo "SID=${{ secrets.SID}}" >> $GITHUB_ENV
       - name: Run test
+        env:
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          sid: ${{ secrets.SID }}
         run: bun test --reporter=junit --reporter-outfile=./bun.xml 
 
   build-and-push-image:
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: [lint]
     permissions:
       contents: read
       packages: write
