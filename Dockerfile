@@ -6,13 +6,14 @@ COPY package.json .
 COPY bun.lockb .
 COPY src/* ./src/
 
-RUN apk add --no-cache curl
 RUN bun install --production --frozen-lockfile
 RUN bun build ./src/index.ts --outfile ./build/index.js --minify --target bun
 
 FROM oven/bun:alpine
 
 WORKDIR /app
+
+RUN apk add --no-cache curl
 
 COPY --from=bundler /app/build/index.js /app/index.js
 
