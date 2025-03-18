@@ -3,7 +3,7 @@ FROM oven/bun:alpine AS bundler
 WORKDIR /app
 
 COPY package.json .
-COPY bun.lockb .
+COPY bun.lock .
 COPY src/* ./src/
 
 RUN bun install --production --frozen-lockfile
