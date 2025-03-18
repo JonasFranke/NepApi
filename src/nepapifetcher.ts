@@ -36,7 +36,7 @@ export async function getJwtToken(
     return data.data.tokenInfo.token;
 }
 
-type statisticsProduction = {
+export type statisticsProduction = {
     today: number;
     todayUnit: string;
     month: number;
