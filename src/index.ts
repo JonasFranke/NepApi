@@ -4,36 +4,32 @@ import {
     type statisticsProduction,
 } from "./nepapifetcher";
 
+let healthy = true;
+
 if (process.env.username && process.env.password && process.env.sid) {
     const jwtToken = await getJwtToken(
         process.env.username,
         process.env.password,
     );
-    let siteData = await getSiteData(process.env.sid, jwtToken);
+    const siteData = await getSiteData(process.env.sid, jwtToken);
     console.log(siteData);
-    let healthy = true;
 
     console.log("Starting nep api");
-
-    try {
-        siteData = await getSiteData(process.env.sid, jwtToken);
-        healthy = true;
-    } catch (e) {
-        healthy = false;
-        console.error("Set health to unhealthy!");
-        console.error(e);
-    }
 
     const server = Bun.serve({
         routes: {
             "/": async () => {
-                return new Response(`${siteData.totalNow}`);
+                return new Response(
+                    `${(await getSiteDataWithHealth(jwtToken))?.totalNow}`,
+                );
             },
             "/:id": async (req) => {
-                const data =
-                    siteData[req.params.id as keyof statisticsProduction];
-                if (data) {
-                    return new Response(`${data}`);
+                const d = await getSiteDataWithHealth(jwtToken);
+                if (d) {
+                    const data = d[req.params.id as keyof statisticsProduction];
+                    if (data) {
+                        return new Response(`${data}`);
+                    }
                 }
                 return new Response("", { status: 404 });
             },
@@ -66,4 +62,17 @@ if (process.env.username && process.env.password && process.env.sid) {
     errorMsg = ` ${errorMsg} ${count > 1 ? "are" : "is"} null!`;
     console.error(errorMsg);
     process.exit(1);
+}
+
+async function getSiteDataWithHealth(jwtToken: string) {
+    let siteData: statisticsProduction | undefined;
+    try {
+        siteData = await getSiteData(process.env.sid, jwtToken);
+        healthy = true;
+    } catch (e) {
+        healthy = false;
+        console.error("Set health to unhealthy!");
+        console.error(e);
+    }
+    return siteData;
 }
