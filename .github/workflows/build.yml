@@ -66,11 +66,21 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: docker/build-push-action@v6.15.0
         with:
           context: .
           push: true
           tags: |
             ghcr.io/jonasfranke/nepapi:latest
+            ghcr.io/jonasfranke/nepapi:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker image (no master)
+        if: ${{ github.ref != 'refs/heads/master' }}
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: .
+          push: true
+          tags: |
             ghcr.io/jonasfranke/nepapi:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
