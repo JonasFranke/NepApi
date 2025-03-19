@@ -19,11 +19,11 @@ if (process.env.username && process.env.password && process.env.sid) {
         routes: {
             "/": async () => {
                 return new Response(
-                    `${(await getSiteDataWithHealth(jwtToken))?.totalNow}`,
+                    `${(await getSiteDataWithHealth())?.totalNow}`,
                 );
             },
             "/:id": async (req) => {
-                const d = await getSiteDataWithHealth(jwtToken);
+                const d = await getSiteDataWithHealth();
                 if (d) {
                     const data = d[req.params.id as keyof statisticsProduction];
                     if (data) {
