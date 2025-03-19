@@ -3,5 +3,6 @@ declare module "bun" {
         username: string;
         password: string;
         sid: string;
+        cacheLife: number | undefined;
     }
 }

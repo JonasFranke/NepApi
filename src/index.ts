@@ -3,8 +3,7 @@ import {
     getSiteData,
     type statisticsProduction,
 } from "./nepapifetcher";
-
-let healthy = true;
+import { getSiteDataWithHealth, isHealthy } from "./store";
 
 if (process.env.username && process.env.password && process.env.sid) {
     const jwtToken = await getJwtToken(
@@ -34,7 +33,7 @@ if (process.env.username && process.env.password && process.env.sid) {
                 return new Response("", { status: 404 });
             },
             "/healthcheck": () => {
-                if (healthy) {
+                if (isHealthy()) {
                     return new Response("", { status: 204 });
                 }
                 return new Response("", { status: 500 });
@@ -62,17 +61,4 @@ if (process.env.username && process.env.password && process.env.sid) {
     errorMsg = ` ${errorMsg} ${count > 1 ? "are" : "is"} null!`;
     console.error(errorMsg);
     process.exit(1);
-}
-
-async function getSiteDataWithHealth(jwtToken: string) {
-    let siteData: statisticsProduction | undefined;
-    try {
-        siteData = await getSiteData(process.env.sid, jwtToken);
-        healthy = true;
-    } catch (e) {
-        healthy = false;
-        console.error("Set health to unhealthy!");
-        console.error(e);
-    }
-    return siteData;
 }
