@@ -1,9 +1,11 @@
 {
-  "name": "neprewrite",
+  "name": "nep_api",
   "module": "src/index.ts",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "bun run src/index.ts"
+    "start": "bun run src/index.ts",
+    "changes": "bunx @changesets/cli"
   },
   "devDependencies": {
     "@types/bun": "^1.2.5",
