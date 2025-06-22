@@ -49,7 +49,6 @@ export async function getSiteDataWithHealth() {
   if (siteData) {
     siteData.today = store.today;
     siteData.total = store.total;
-    siteData.totalNow = store.totalNow;
   }
 
   return siteData;
@@ -62,9 +61,6 @@ function writeCache(data: statisticsProduction) {
   }
   if (data.total > 0) {
     store.total = data.total;
-  }
-  if (data.totalNow > store.totalNow) {
-    store.totalNow = data.totalNow;
   }
 }
 
