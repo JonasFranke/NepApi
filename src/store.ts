@@ -47,10 +47,6 @@ export async function getSiteDataWithHealth() {
   }
 
   if (siteData) {
-    console.log(`store: ${store.today}, ${store.total}, ${store.totalNow}`);
-    console.log(
-      `siteData: ${siteData.today}, ${siteData.total}, ${siteData.totalNow}`,
-    );
     siteData.today = store.today;
     siteData.total = store.total;
     siteData.totalNow = store.totalNow;
