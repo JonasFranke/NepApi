@@ -36,6 +36,9 @@ export async function getSiteDataWithHealth() {
         invalidateCache,
         process.env.cacheLife ? process.env.cacheLife * 100 : 6000,
       );
+      if (new Date().getHours() <= 2) {
+        store.today = 0;
+      }
     } else {
       console.log("Served data from cache");
     }
@@ -46,8 +49,13 @@ export async function getSiteDataWithHealth() {
     jwtToken = await getJwtToken(process.env.username, process.env.password);
   }
 
-  if (siteData) {
+  if (!siteData) return null;
+
+  if (siteData.today === 0 && new Date().getHours() > 3) {
     siteData.today = store.today;
+  }
+
+  if (siteData.total === 0) {
     siteData.total = store.total;
   }
 
@@ -57,17 +65,9 @@ export async function getSiteDataWithHealth() {
 function writeCache(data: statisticsProduction) {
   if (data.today > store.today) {
     store.today = data.today;
-    resetStoreTime();
   }
   if (data.total > 0) {
     store.total = data.total;
-  }
-}
-
-function resetStoreTime() {
-  const time = new Date().getHours();
-  if (time === 0) {
-    store.today = 0;
   }
 }
 
