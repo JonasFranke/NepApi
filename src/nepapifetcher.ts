@@ -51,7 +51,8 @@ export type statisticsProduction = {
   totalMoneyUnit: string;
 };
 
-let dataCache: statisticsProduction;
+let lastTodayProduction = 0;
+let lastProductionUpdateDate: Date | null = null;
 
 export async function getSiteData(
   sid: string,
@@ -87,11 +88,30 @@ export async function getSiteData(
     });
 
     const data = await res.json();
-    dataCache = data.data.statisticsProduction;
-    return data.data.statisticsProduction;
-  } catch (e) {
-    console.error("Error fetching site data:", e);
-    console.error("Returning cached data if available.");
-    return dataCache;
+    const productionData = data.data.statisticsProduction;
+    const currentDate = new Date();
+
+    const isNewDay =
+      lastProductionUpdateDate === null ||
+      currentDate.getDate() !== lastProductionUpdateDate.getDate() ||
+      currentDate.getMonth() !== lastProductionUpdateDate.getMonth() ||
+      currentDate.getFullYear() !== lastProductionUpdateDate.getFullYear();
+
+    if (isNewDay) {
+      lastTodayProduction = productionData.today;
+      lastProductionUpdateDate = currentDate;
+    } else {
+      if (productionData.today === 0 && lastTodayProduction !== 0) {
+        productionData.today = lastTodayProduction;
+      } else {
+        lastTodayProduction = productionData.today;
+        lastProductionUpdateDate = currentDate;
+      }
+    }
+
+    return productionData;
+  } catch (error) {
+    console.error("Error fetching site data:", error);
+    throw error;
   }
 }
