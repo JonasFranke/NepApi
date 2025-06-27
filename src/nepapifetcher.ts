@@ -51,6 +51,9 @@ export type statisticsProduction = {
   totalMoneyUnit: string;
 };
 
+let lastTodayProduction = 0;
+let lastProductionUpdateDate: Date | null = null;
+
 export async function getSiteData(
   sid: string,
   jwt: string,
@@ -84,5 +87,26 @@ export async function getSiteData(
   });
 
   const data = await res.json();
-  return data.data.statisticsProduction;
+  const productionData = data.data.statisticsProduction;
+  const currentDate = new Date();
+
+  const isNewDay =
+    lastProductionUpdateDate === null ||
+    currentDate.getDate() !== lastProductionUpdateDate.getDate() ||
+    currentDate.getMonth() !== lastProductionUpdateDate.getMonth() ||
+    currentDate.getFullYear() !== lastProductionUpdateDate.getFullYear();
+
+  if (isNewDay) {
+    lastTodayProduction = productionData.today;
+    lastProductionUpdateDate = currentDate;
+  } else {
+    if (productionData.today === 0 && lastTodayProduction !== 0) {
+      productionData.today = lastTodayProduction;
+    } else {
+      lastTodayProduction = productionData.today;
+      lastProductionUpdateDate = currentDate;
+    }
+  }
+
+  return productionData;
 }
