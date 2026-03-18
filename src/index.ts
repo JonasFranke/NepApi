@@ -5,6 +5,8 @@ import {
 } from "./nepapifetcher";
 import { getSiteDataWithHealth, isHealthy } from "./store";
 
+let server: ReturnType<typeof Bun.serve>;
+
 if (process.env.username && process.env.password && process.env.sid) {
   const jwtToken = await getJwtToken(
     process.env.username,
@@ -15,7 +17,7 @@ if (process.env.username && process.env.password && process.env.sid) {
 
   console.log("Starting nep api");
 
-  const server = Bun.serve({
+  server = Bun.serve({
     routes: {
       "/": async () => {
         return new Response(`${(await getSiteDataWithHealth())?.totalNow}`);
@@ -60,3 +62,15 @@ if (process.env.username && process.env.password && process.env.sid) {
   console.error(errorMsg);
   process.exit(1);
 }
+
+process.on("SIGINT", () => {
+  console.log("Closing server...");
+  server.stop();
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("Closing server...");
+  server.stop();
+  process.exit(0);
+});
