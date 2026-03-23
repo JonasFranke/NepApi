@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "neprewrite",
@@ -9,7 +10,7 @@
         "@types/bun": "^1.2.5",
       },
       "peerDependencies": {
-        "typescript": "^5.0.0",
+        "typescript": "^5.0.0 || ^6.0.0",
       },
     },
   },
