@@ -1,5 +1,13 @@
 # nep_api
 
+## 1.1.1
+
+### Patch Changes
+
+- 4056040: chore(deps): update all non-major dependencies
+- 6e67c74: Update deps
+- 6e67c74: update minor deps
+
 ## 1.1.0
 
 ### Minor Changes
